@@ -3,25 +3,31 @@
 #define Variables
 
 DOCKER_USERNAME="krtech26"
-REPO_NAME="react-site-app"
-IMAGE_NAME="$DOCKER_USERNAME/$REPO_NAME"
+DEV_REPO_NAME="react-site-app-dev"
+PROD_REPO_NAME="react-site-app-prod"
+DEV_IMAGE_NAME="$DOCKER_USERNAME/$DEV_REPO_NAME"
+PROD_IMAGE_NAME="$DOCKER_USERNAME/$PROD_REPO_NAME"
 DEV_TAG="dev"
 PROD_TAG="prod"
 
-#build the docker image
+#build the docker image to Dev Repo
 echo " Building Docker Image..."
-docker build -t $IMAGE_NAME:$DEV_TAG .
+docker build -t $DEV_IMAGE_NAME:$DEV_TAG .
+
+#build the docker image to Prod Repo
+echo " Building Docker Image..."
+docker build -t $PROD_IMAGE_NAME:$DEV_TAG .
 
 #Tag the image for Dev and Production
 echo " Tagging the image for dev and production..."
-docker tag $IMAGE_NAME:$DEV_TAG $IMAGE_NAME:$PROD_TAG
+docker tag $DEV_IMAGE_NAME:$DEV_TAG $PROD_IMAGE_NAME:$PROD_TAG
 
 #push both tags to Docker hub
 echo "pushing dev tag..."
-docker push $IMAGE_NAME:$DEV_TAG
+docker push $DEV_IMAGE_NAME:$DEV_TAG
 
 echo "Pushing prod tag.."
-docker push $IMAGE_NAME:$PROD_TAG
+docker push $PROD_IMAGE_NAME:$PROD_TAG
 
 echo " Done"
 
