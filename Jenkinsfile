@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_HUB_USERNAME = 'krtech26'
         DEV_IMAGE = 'react-site-app-dev'
-        
     }
 
     stages {
@@ -14,12 +13,19 @@ pipeline {
             }
         }
 
+        stage('DockerHub Credentials') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'Docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    echo "DockerHub credentials loaded"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh './build.sh'
-                }
             }
-        
+        }
 
         stage('Push Docker Image') {
             when {
@@ -29,7 +35,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'Docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $DOCKER_HUB_USER/$DEV_IMAGE:latest
+                        docker push $DOCKER_HUB_USERNAME/$DEV_IMAGE:latest
                         docker logout
                     """
                 }
