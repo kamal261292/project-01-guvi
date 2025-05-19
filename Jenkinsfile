@@ -4,8 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_USERNAME = 'krtech'
         DEV_IMAGE = 'react-site-app-dev'
-        #PROD_IMAGE = 'react-site-app-prod:prod'
-        #DOCKER_CREDENTIALS_ID = 'Docker-hub-creds'
+        
     }
 
     triggers {
