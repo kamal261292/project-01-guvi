@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_USERNAME = 'krtech26'
         DEV_IMAGE = 'react-site-app-dev'
+        PROD_IMAGE = 'react-site-app-prod'
     }
 
     stages {
@@ -40,6 +41,20 @@ pipeline {
                         docker logout
                     """
                 }
+            }
+        }
+
+        stage('push docker image to prod when merge dev to master') {
+            when {
+            branch 'main'
+            }
+            steps {  
+             sh """
+                docker pull ${DOCKER_HUB_USERNAME}/${DEV_IMAGE}:dev
+                docker tag ${DOCKER_HUB_USERNAME}/${DEV_IMAGE}:dev ${PROD_IMAGE}:prod
+                docker push ${PROD_IMAGE}:prod
+                docker rmi ${PROD_IMAGE}:prod
+                """
             }
         }
     }
