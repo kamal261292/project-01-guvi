@@ -2,13 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USERNAME = 'krtech'
+        DOCKER_HUB_USERNAME = 'krtech26'
         DEV_IMAGE = 'react-site-app-dev'
         
-    }
-
-    triggers {
-        pollSCM('* * * *') // optional if webhook is set up
     }
 
     stages {
@@ -27,15 +23,12 @@ pipeline {
 
         stage('Push Docker Image') {
             when {
-                anyOf {
-                    branch 'dev'
-                    branch 'master'
-                }
+                branch 'dev'
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'Docker-hub-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         docker push $DOCKER_HUB_USER/$DEV_IMAGE:latest
                         docker logout
                     """
