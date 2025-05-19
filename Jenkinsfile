@@ -9,7 +9,7 @@ pipeline {
     }
 
     triggers {
-        pollSCM('* * * * *') // optional if webhook is set up
+        pollSCM('* * * *') // optional if webhook is set up
     }
 
     stages {
