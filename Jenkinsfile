@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DEV_IMAGE = 'krtech26/react-site-app-dev:dev'
-        PROD_IMAGE = 'krtech26/react-site-app-prod:prod'
+        DOCKER_HUB_USERNAME = 'krtech'
+        DEV_IMAGE = 'react-site-app-dev:dev'
+        PROD_IMAGE = 'react-site-app-prod:prod'
         DOCKER_CREDENTIALS_ID = 'Docker-hub-creds'
     }
 
@@ -20,21 +21,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    BRANCH_NAME = env.BRANCH_NAME ?: sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
-
-                    if (BRANCH_NAME == 'dev') {
-                        IMAGE = DEV_IMAGE
-                    } else if (BRANCH_NAME == 'master') {
-                        IMAGE = PROD_IMAGE
-                    } else {
-                        error("This pipeline only supports 'dev' and 'master' branches.")
-                    }
-
-                    sh "docker build -t ${IMAGE} ."
+                sh "docker build -t $DOCKER_HUB_USERNAME/DEV_IMAGE:dev ."
                 }
             }
-        }
+        
 
         stage('Push Docker Image') {
             when {
