@@ -9,8 +9,21 @@ pipeline {
 
     stages {
         stage('Checkout') {
+            when {
+            branch 'dev'
+            }
             steps {
                 git branch: 'dev', url: 'https://github.com/kamal261292/project-01-guvi.git'
+            }
+        }
+
+
+        stage('Checkout') {
+            when {
+            branch 'main'
+            }
+            steps {
+                git branch: 'main', url: 'https://github.com/kamal261292/project-01-guvi.git'
             }
         }
 
@@ -23,6 +36,9 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            when {
+            branch 'dev'
+            }
             steps {
                 sh 'chmod +x build.sh'
                 sh './build.sh'
