@@ -18,9 +18,6 @@ docker build -t $DEV_IMAGE_NAME:$DEV_TAG .
 echo " Building Docker Image..."
 docker build -t $PROD_IMAGE_NAME:$DEV_TAG .
 
-#Tag the image for Dev and Production
-echo " Tagging the image for dev and production..."
-docker tag $DEV_IMAGE_NAME:$DEV_TAG $PROD_IMAGE_NAME:$PROD_TAG
 
 #push both tags to Docker hub
 echo "pushing dev tag..."
