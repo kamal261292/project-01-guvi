@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         DOCKER_HUB_USERNAME = 'krtech'
-        DEV_IMAGE = 'react-site-app-dev:dev'
-        PROD_IMAGE = 'react-site-app-prod:prod'
-        DOCKER_CREDENTIALS_ID = 'Docker-hub-creds'
+        DEV_IMAGE = 'react-site-app-dev'
+        #PROD_IMAGE = 'react-site-app-prod:prod'
+        #DOCKER_CREDENTIALS_ID = 'Docker-hub-creds'
     }
 
     triggers {
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $DOCKER_HUB_USERNAME/DEV_IMAGE:dev ."
+                sh "docker build -t $DOCKER_HUB_USERNAME/$DEV_IMAGE:latest ."
                 }
             }
         
@@ -36,8 +36,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${IMAGE}
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+                        docker push $DOCKER_HUB_USER/$DEV_IMAGE:latest
                         docker logout
                     """
                 }
